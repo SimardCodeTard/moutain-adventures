@@ -1,74 +1,117 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { View, Text, Button, StyleSheet, ScrollView } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+// Écran d'accueil
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function HomeScreen() {
+type HomeScreenNavigationProp = StackNavigationProp<any, any>;
+
+function HomeScreen({ navigation }: { navigation: HomeScreenNavigationProp }) {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Bienvenue sur Val Thorens Extreme</Text>
+      <Text style={styles.description}>Découvrez des activités de sports extrêmes cet été à Val Thorens!</Text>
+      <Button
+        title="Planifiez votre aventure"
+        onPress={() => navigation.navigate('Planification')}
+      />
+      <Button
+        title="Rejoindre la communauté"
+        onPress={() => navigation.navigate('Communauté')}
+      />
+    </View>
+  );
+}
+
+// Écran des activités
+function ActivitiesScreen() {
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Nos Activités</Text>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>VTT</Text>
+        <Text>Explorez les montagnes avec nos parcours de VTT adaptés à tous les niveaux.</Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Parapente</Text>
+        <Text>Volez au-dessus des Alpes pour une vue imprenable de Val Thorens.</Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Escalade</Text>
+        <Text>Grimpez les montagnes et vivez l'adrénaline des parcours d'escalade.</Text>
+      </View>
+    </ScrollView>
+  );
+}
+
+// Écran de planification
+function PlanificationScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Planifiez votre aventure</Text>
+      <Button
+        title="Réservez une activité"
+        onPress={() => alert('Réservation en cours!')}
+      />
+    </View>
+  );
+}
+
+// Écran de communauté
+function CommunityScreen() {
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Rejoindre la Communauté</Text>
+      <Text>Partagez vos expériences, lisez les avis des autres et découvrez de nouveaux défis!</Text>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Top Challenges</Text>
+        <Text>Voir les meilleurs classements et défis de la communauté.</Text>
+      </View>
+    </ScrollView>
+  );
+}
+
+// Création de la navigation entre les écrans
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Activités" component={ActivitiesScreen} />
+      <Stack.Screen name="Planification" component={PlanificationScreen} />
+      <Stack.Screen name="Communauté" component={CommunityScreen} />
+    </Stack.Navigator>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
+    padding: 20,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  description: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  card: {
+    backgroundColor: '#f1f1f1',
+    marginBottom: 15,
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
